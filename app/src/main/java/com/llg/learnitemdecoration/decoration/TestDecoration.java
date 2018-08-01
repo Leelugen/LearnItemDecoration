@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.support.v4.util.LongSparseArray;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import com.llg.learnitemdecoration.adapter.RecyclerViewAdapter;
 public class TestDecoration extends RecyclerView.ItemDecoration {
     private RecyclerViewAdapter mAdapter;
     private final SparseArray<Rect> mHeaderRects = new SparseArray<>();
-    private final LongSparseArray<View> mHeaderViews = new LongSparseArray<>();//保存头部view
 
     public TestDecoration(RecyclerViewAdapter mAdapter) {
         this.mAdapter = mAdapter;
@@ -34,12 +34,12 @@ public class TestDecoration extends RecyclerView.ItemDecoration {
             headerHeight = header.getHeight();
         }
         outRect.set(0, headerHeight, 0, 0);
+
     }
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDraw(c, parent, state);
-//        Log.e("TestDecoration", "onDraw()..........");
     }
 
     @Override
@@ -49,24 +49,24 @@ public class TestDecoration extends RecyclerView.ItemDecoration {
         mHeaderRects.clear();
         final int count = parent.getChildCount();
         //遍历屏幕上加载的item
-        for (int layoutPos = 0; layoutPos < count; layoutPos++) {
-            final View child = parent.getChildAt(layoutPos);
+        for (int i = 0; i < count; i++) {
+            final View child = parent.getChildAt(i);
             //获取该item在列表数据中的位置
-            final int adapterPos = parent.getChildAdapterPosition(child);
+            final int position = parent.getChildAdapterPosition(child);
             //只有在最上面一个item或者有header的item才绘制header
-            if (adapterPos != RecyclerView.NO_POSITION && (layoutPos == 0 || hasHeader(adapterPos))) {
-                View header = getHeader(parent, adapterPos);
+            if (position != RecyclerView.NO_POSITION && (i == 0 || hasHeader(position))) {
+                View header = getHeader(parent, position);
                 c.save();
                 //获取绘制header的起始位置(left,top)
                 final int left = child.getLeft();
-                final int top = getHeaderTop(parent, child, header, adapterPos, layoutPos);
+                final int top = getHeaderTop(parent, child, header, position, i);
                 //将画布移动到绘制的位置
                 c.translate(left, top);
                 //绘制header
                 header.draw(c);
                 c.restore();
                 //保存绘制的header的区域
-                mHeaderRects.put(adapterPos, new Rect(left, top, left + header.getWidth(), top + header.getHeight()));
+                mHeaderRects.put(position, new Rect(left, top, left + header.getWidth(), top + header.getHeight()));
             }
         }
     }
@@ -113,34 +113,25 @@ public class TestDecoration extends RecyclerView.ItemDecoration {
      * @return
      */
     public View getHeader(RecyclerView parent, int position) {
-        //根据位置获取每一组的头部id
-        final int headerId = mAdapter.getHeaderId(position);
-        //通过头部id，从保存的头部view数组中获取改组的头部view
-        View header = mHeaderViews.get(headerId);
-        //如果为空，就通过adapter创建
-        if (header == null) {
-            //创建HeaderViewHolder
-            RecyclerViewAdapter.HeaderHolder holder = mAdapter.onCreateHeaderViewHolder(parent);
-            header = holder.itemView;
-            //绑定数据
-            mAdapter.onBindHeaderViewHolder(holder, position);
-            //测量View并且layout
-            int widthSpec = View.MeasureSpec.makeMeasureSpec(parent.getWidth(), View.MeasureSpec.EXACTLY);
-            int heightSpec = View.MeasureSpec.makeMeasureSpec(parent.getHeight(), View.MeasureSpec.UNSPECIFIED);
-            //根据父View的MeasureSpec和子view自身的LayoutParams以及padding来获取子View的MeasureSpec
-            int childWidth = ViewGroup.getChildMeasureSpec(widthSpec,
-                    parent.getPaddingLeft() + parent.getPaddingRight(), header.getLayoutParams().width);
-            int childHeight = ViewGroup.getChildMeasureSpec(heightSpec,
-                    parent.getPaddingTop() + parent.getPaddingBottom(), header.getLayoutParams().height);
-            //进行测量
-            header.measure(childWidth, childHeight);
-            //根据测量后的宽高放置位置
-            header.layout(0, 0, header.getMeasuredWidth(), header.getMeasuredHeight());
-            //将创建好的头部view保存在数组中，避免每次重复创建
-            mHeaderViews.put(headerId, header);
-        }
+        //创建HeaderViewHolder
+        RecyclerViewAdapter.HeaderHolder holder = mAdapter.onCreateHeaderViewHolder(parent);
+        View header = holder.itemView;
+        //绑定数据
+        mAdapter.onBindHeaderViewHolder(holder, position);
+        //测量View并且layout
+        int widthSpec = View.MeasureSpec.makeMeasureSpec(parent.getWidth(), View.MeasureSpec.EXACTLY);
+        int heightSpec = View.MeasureSpec.makeMeasureSpec(parent.getHeight(), View.MeasureSpec.UNSPECIFIED);
+        //根据父View的MeasureSpec和子view自身的LayoutParams以及padding来获取子View的MeasureSpec
+        int childWidthSpec = ViewGroup.getChildMeasureSpec(widthSpec,
+                parent.getPaddingLeft() + parent.getPaddingRight(), header.getLayoutParams().width);
+        int childHeightSpec = ViewGroup.getChildMeasureSpec(heightSpec,
+                parent.getPaddingTop() + parent.getPaddingBottom(), header.getLayoutParams().height);
+        //进行测量
+        header.measure(childWidthSpec, childHeightSpec);
+        //根据测量后的宽高放置位置
+        header.layout(0, 0, header.getMeasuredWidth(), header.getMeasuredHeight());
+        //将创建好的头部view保存在数组中，避免每次重复创建
         return header;
-
     }
 
     /**

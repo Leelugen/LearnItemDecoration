@@ -4,20 +4,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.llg.learnitemdecoration.adapter.RecyclerViewAdapter;
 import com.llg.learnitemdecoration.decoration.TestDecoration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     TestDecoration mDecoration;
     RecyclerViewAdapter mViewAdapter;
 
-    public static final String[] datas ={"test->1","test->2","test->3","test->4","test-5","test->1","test->2","test->3","test->4","test-5","test->1","test->2","test->3","test->4","test-5","test->1","test->2","test->3","test->4","test-5","test->1","test->2","test->3","test->4","test-5","test->1","test->2","test->3","test->4","test-5"};
+    List<String> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +28,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mRecyclerView = findViewById(R.id.rv);
         mViewAdapter = new RecyclerViewAdapter(this);
+
         mDecoration = new TestDecoration(mViewAdapter);
+        LinearLayoutManager layoutmanager = new LinearLayoutManager(this);
+        layoutmanager.setOrientation(LinearLayoutManager.VERTICAL);
 
         mRecyclerView.setAdapter(mViewAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(layoutmanager);
         mRecyclerView.addItemDecoration(mDecoration);
-        mViewAdapter.setData(Arrays.asList(datas));
-        mViewAdapter.notifyDataSetChanged();
 
-       // StickyRecyclerHeadersTouchListener listener = new StickyRecyclerHeadersTouchListener(mRecyclerView,mDecoration);
-       // mRecyclerView.addOnItemTouchListener(listener);
+        StickyRecyclerHeadersTouchListener listener = new StickyRecyclerHeadersTouchListener(this,mRecyclerView,mDecoration);
+        mRecyclerView.addOnItemTouchListener(listener);
+
+
+        initDatas();
+        mViewAdapter.setData(data);
+        mViewAdapter.notifyDataSetChanged();
+    }
+
+    /**初始化测试数据*/
+    private void initDatas() {
+        data = new ArrayList<>();
+        for (int i = 0; i < 56;i++) {
+            data.add(i+" test ");
+        }
     }
 }
