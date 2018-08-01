@@ -2,9 +2,7 @@ package com.llg.learnitemdecoration.decoration;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.support.v4.util.LongSparseArray;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +32,6 @@ public class TestDecoration extends RecyclerView.ItemDecoration {
             headerHeight = header.getHeight();
         }
         outRect.set(0, headerHeight, 0, 0);
-
     }
 
     @Override

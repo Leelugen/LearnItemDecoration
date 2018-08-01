@@ -46,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
         mViewAdapter.notifyDataSetChanged();
     }
 
+
+
+
+
+
+
+
     /**初始化测试数据*/
     private void initDatas() {
         data = new ArrayList<>();

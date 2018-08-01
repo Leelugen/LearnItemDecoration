@@ -77,7 +77,7 @@ public class StickyRecyclerHeadersTouchListener implements RecyclerView.OnItemTo
             if (position != -1) {
                 //如果position不等于-1,则表示点击在header区域，然后在判断是否在header需要响应的区域
                 View headerView = mDecor.getHeader(mRecyclerView, position);
-                View view = headerView.findViewById(R.id.group_click);
+                View view = headerView.findViewById(R.id.cb_group);
                 if (mDecor.findHeaderClickView(view, (int) e.getX(), (int) e.getY())) {
                     //如果在header需要响应的区域，该区域的view模拟点击
                     view.performClick();
