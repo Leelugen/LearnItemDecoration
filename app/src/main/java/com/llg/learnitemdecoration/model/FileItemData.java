@@ -13,8 +13,6 @@ public class FileItemData {
     private String createDate;//被创建时间
     private String fileEx;//文件名后缀
 
-
-
     public FileItemData(String fileName,String filePath){
         this.fileName = fileName;
         this.filePath = filePath;

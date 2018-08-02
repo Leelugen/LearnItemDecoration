@@ -88,11 +88,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
             group = itemView.findViewById(R.id.group);
             checkGroup = itemView.findViewById(R.id.cb_group);
+
         }
     }
 
     //采用xml方式来实现ItemDecoration，可以更方便的定制ItemDecoration的内容，生成head布局
-    public HeaderHolder onCreateHeaderViewHolder(ViewGroup parent) { 
+    public HeaderHolder onCreateHeaderViewHolder(ViewGroup parent) {
         return new HeaderHolder(LayoutInflater.from(mContext).inflate(R.layout.item_decoration, parent, false));
     }
 
@@ -105,6 +106,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 String createDate = datas.get(position).getCreateDate();
                 boolean selected = datas.get(position).isSelected();
 
+                holder.checkGroup.setChecked(!selected);
+
+
+
                 //向后遍历
                 for (int i = position; i < datas.size(); i++) {
                     FileItemData data = datas.get(i);
@@ -116,7 +121,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
 
                 //向前遍历
-                for (int j = position; j >= 0; j--) {
+                for (int j = position; j > 0; j--) {
                     FileItemData data = datas.get(j);
                     if (data.getCreateDate().equals(createDate)) {
                         data.setSelected(!selected);

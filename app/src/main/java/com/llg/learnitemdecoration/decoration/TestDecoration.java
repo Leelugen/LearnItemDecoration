@@ -127,7 +127,6 @@ public class TestDecoration extends RecyclerView.ItemDecoration {
         header.measure(childWidthSpec, childHeightSpec);
         //根据测量后的宽高放置位置
         header.layout(0, 0, header.getMeasuredWidth(), header.getMeasuredHeight());
-        //将创建好的头部view保存在数组中，避免每次重复创建
         return header;
     }
 
