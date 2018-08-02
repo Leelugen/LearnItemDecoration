@@ -4,6 +4,7 @@
     android:layout_height="60dp"
     android:orientation="horizontal"
     android:background="@color/colorHeader">
+
     <TextView
         android:id="@+id/group"
         android:layout_width="0dp"
@@ -14,11 +15,10 @@
         android:gravity="center"/>
     <CheckBox
         android:id="@+id/cb_group"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_margin="16dp"
-        android:textSize="20sp"
         android:gravity="center"
+        android:src="@drawable/deletebar_trash_selector"
         />
 </LinearLayout>

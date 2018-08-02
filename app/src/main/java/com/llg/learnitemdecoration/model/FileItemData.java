@@ -9,7 +9,7 @@ public class FileItemData {
     private String fileName;//文件名
     private String filePath;//文件路径
     private String coverPath;//封面路径
-    private Boolean selected;//是否被选中
+    private boolean selected;//是否被选中
     private String createDate;//被创建时间
     private String fileEx;//文件名后缀
 
@@ -48,11 +48,11 @@ public class FileItemData {
         return coverPath;
     }
 
-    public Boolean getSelected() {
+    public boolean isSelected() {
         return selected;
     }
 
-    public void setSelected(Boolean selected) {
+    public void setSelected(boolean selected) {
         this.selected = selected;
     }
 

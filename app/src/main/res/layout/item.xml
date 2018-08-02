@@ -11,6 +11,7 @@
         android:layout_margin="16dp"/>
 
     <CheckBox
+        android:id="@+id/cb_item"
         android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

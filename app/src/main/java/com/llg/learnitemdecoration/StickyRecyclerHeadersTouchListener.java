@@ -34,27 +34,6 @@ public class StickyRecyclerHeadersTouchListener implements RecyclerView.OnItemTo
             // Don't return false if a single tap is detected
             return true;
         }
-       /* //如果是点击在header区域，则拦截事件
-        if (e.getAction() == MotionEvent.ACTION_DOWN) {
-           // int position = mDecor.findHeaderPositionUnder((int) e.getX(), (int) e.getY());
-           // return position != -1;
-
-            //根据点击的坐标查找是不是点击在header的区域
-            int position = mDecor.findHeaderPositionUnder((int) e.getX(), (int) e.getY());
-            if (position != -1) {
-                //如果position不等于-1,则表示点击在header区域，然后在判断是否在header需要响应的区域
-                View headerView = mDecor.getHeader(mRecyclerView, position);
-                View view1 = headerView.findViewById(R.id.group_click);
-                if (mDecor.findHeaderClickView(view1, (int) e.getX(), (int) e.getY())) {
-                    //如果在header需要响应的区域，该区域的view模拟点击
-                    view1.performClick();
-                }
-                mRecyclerView.playSoundEffect(SoundEffectConstants.CLICK);
-                headerView.onTouchEvent(e);
-                return true;
-            }
-
-        }*/
         return false;
     }
 
