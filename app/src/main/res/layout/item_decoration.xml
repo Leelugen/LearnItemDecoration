@@ -20,5 +20,6 @@
         android:layout_margin="16dp"
         android:gravity="center"
         android:checked="false"
+        android:button="@drawable/checkbox_selector"
         />
 </LinearLayout>

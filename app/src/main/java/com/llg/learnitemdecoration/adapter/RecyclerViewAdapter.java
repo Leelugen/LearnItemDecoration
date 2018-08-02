@@ -3,6 +3,7 @@ package com.llg.learnitemdecoration.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,25 +50,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder,int position) {
+
         final FileItemData data = datas.get(position);
-        final String str = data.getFileName();
-        final boolean selected = data.isSelected();
-        holder.tv_item_layout.setText(str);
-        holder.cb_select.setChecked(selected);
+
+        holder.tv_item_layout.setText(data.getFileName());
+        holder.cb_select.setChecked(data.isSelected());
 
         holder.tv_item_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, str, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, data.getFileName(), Toast.LENGTH_SHORT).show();
             }
         });
 
         holder.cb_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                data.setSelected(!selected);
-                holder.cb_select.setChecked(!selected);
+                data.setSelected(!data.isSelected());
             }
         });
     }
@@ -100,16 +100,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //绑定head的数据
     public void onBindHeaderViewHolder(final HeaderHolder holder, final int position) {
         holder.group.setText(getHeaderId(position));
+
+
+        holder.checkGroup.setChecked(datas.get(position).isSelected());
+
+        //全选
         holder.checkGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String createDate = datas.get(position).getCreateDate();
                 boolean selected = datas.get(position).isSelected();
 
-                holder.checkGroup.setChecked(!selected);
-
-
-
+                Log.d("checkGroup", holder.checkGroup.isChecked()+"");
                 //向后遍历
                 for (int i = position; i < datas.size(); i++) {
                     FileItemData data = datas.get(i);
