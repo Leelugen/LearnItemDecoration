@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.llg.learnitemdecoration.adapter.RecyclerViewAdapter;
 import com.llg.learnitemdecoration.decoration.TestDecoration;
+import com.llg.learnitemdecoration.model.FileItemData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     TestDecoration mDecoration;
     RecyclerViewAdapter mViewAdapter;
 
-    List<String> data;
+    List<FileItemData> datas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,22 +43,28 @@ public class MainActivity extends AppCompatActivity {
 
 
         initDatas();
-        mViewAdapter.setData(data);
+        mViewAdapter.setData(datas);
         mViewAdapter.notifyDataSetChanged();
     }
 
-
-
-
-
-
-
-
     /**初始化测试数据*/
     private void initDatas() {
-        data = new ArrayList<>();
+        datas = new ArrayList<>();
         for (int i = 0; i < 56;i++) {
-            data.add(i+" test ");
+            FileItemData itemData = new FileItemData("filename"+i,"filepath"+i);
+            if (i<10){
+                itemData.setCreateDate("18-02-02");
+            }else if (i<20){
+                itemData.setCreateDate("18-03-03");
+            }else if (i<30){
+                itemData.setCreateDate("18-04-04");
+            }else if (i<40){
+                itemData.setCreateDate("18-05-05");
+            }else {
+                itemData.setCreateDate("18-06-06");
+            }
+            datas.add(itemData);
         }
+        datas.get(3);
     }
 }

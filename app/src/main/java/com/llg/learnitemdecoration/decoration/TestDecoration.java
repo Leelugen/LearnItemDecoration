@@ -146,15 +146,15 @@ public class TestDecoration extends RecyclerView.ItemDecoration {
         int top = ((int) child.getY()) - headerHeight;
         //在绘制最顶部的header的时候，需要考虑处理两个分组的header交换时候的情况
         if (layoutPos == 0) {
-            final int count = parent.getChildCount();
-            final int currentId = mAdapter.getHeaderId(adapterPos);
+             int count = parent.getChildCount();
+             String currentId = mAdapter.getHeaderId(adapterPos);
             //从第二个屏幕上线上的第二个item开始遍历
             for (int i = 1; i < count; i++) {
                 int nextpos = parent.getChildAdapterPosition(parent.getChildAt(i));
                 if (nextpos != RecyclerView.NO_POSITION) {
-                    int nextId = mAdapter.getHeaderId(nextpos);
+                    String nextId = mAdapter.getHeaderId(nextpos);
                     //找到下一个不同组的view
-                    if (currentId != nextId) {
+                    if (!currentId.equals(nextId)) {
                         final View next = parent.getChildAt(i);
                         //当不同组的第一个view距离顶部的位置减去两组header的高度，得到offset
                         final int offset = ((int) next.getY()) - (headerHeight + getHeader(parent, nextpos).getHeight());

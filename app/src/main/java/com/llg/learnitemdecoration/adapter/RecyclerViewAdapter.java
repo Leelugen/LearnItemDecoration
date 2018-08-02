@@ -1,6 +1,7 @@
 package com.llg.learnitemdecoration.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.llg.learnitemdecoration.R;
-import com.llg.learnitemdecoration.model.GroupInfo;
+import com.llg.learnitemdecoration.model.FileItemData;
 
 import java.util.List;
 
@@ -19,26 +20,25 @@ import java.util.List;
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     private Context mContext;
-    private List<String> datas;
-
-    private GroupInfoCallback infoCallback;
+    private List<FileItemData> datas;
 
     public RecyclerViewAdapter(Context context) {
         this.mContext = context;
     }
 
-    public void setData(List<String> datas) {
+    public void setData(List<FileItemData> datas) {
         this.datas = datas;
     }
 
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.populate(datas.get(position));
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        holder.populate(datas.get(position).getFileName());
     }
 
     @Override
@@ -49,18 +49,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //是否存在分组的头部
     public boolean hasHeader(int pos) {
         //TODO 分组的逻辑
-        if (pos % 5 == 0) {
+       /* if (pos % 5 == 0) {
             return true;
         } else {
             return false;
-        }
-
+        }*/
+       if (pos == 0){
+           return true;
+       }
+       String currentDate = datas.get(pos).getCreateDate();
+       String preDate = datas.get(pos-1).getCreateDate();
+       return !currentDate.equals(preDate);
     }
 
-    //获取每条数据属于哪一分组
-    public int getHeaderId(int position) {
-        //TODO 某一项是否属于某组
-        return position / 5;
+    //获取某一数据属于哪一分组
+    public String getHeaderId(int position) {
+        return datas.get(position).getCreateDate();
     }
 
     //采用xml方式来实现ItemDecoration，可以更方便的定制ItemDecoration的内容，生成head布局
@@ -70,7 +74,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //绑定head的数据
     public void onBindHeaderViewHolder(HeaderHolder viewholder, int position) {
-        viewholder.group.setText("分组" + getHeaderId(position));
+        viewholder.group.setText(getHeaderId(position));
        // viewholder.checkGroup.setText("点击分组" + getHeaderId(position));
     }
 
@@ -79,7 +83,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView group;
         CheckBox checkGroup;
 
-        public HeaderHolder(View itemView) {
+        HeaderHolder(View itemView) {
             super(itemView);
             group = itemView.findViewById(R.id.group);
             final CheckBox checkGroup = itemView.findViewById(R.id.cb_group);
@@ -97,7 +101,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView tv_item_layout;
         String str;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             tv_item_layout = (TextView) itemView.findViewById(R.id.tv_item);
             tv_item_layout.setOnClickListener(new View.OnClickListener() {
@@ -114,15 +118,4 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    public GroupInfoCallback getInfoCallback() {
-        return infoCallback;
-    }
-
-    public void setInfoCallback(GroupInfoCallback infoCallback) {
-        this.infoCallback = infoCallback;
-    }
-
-    public interface GroupInfoCallback {
-        GroupInfo getGroupInfo(int position);
-    }
 }
